@@ -1,0 +1,16 @@
+# Modelo: troque SEU_USUARIO e o caminho da pasta de saida, copie para /etc/systemd/system/ e rode
+#   sudo install -D -m 0755 bc250-registro.py /usr/local/lib/bc250-registro/bc250-registro.py
+#   sudo systemctl daemon-reload && sudo systemctl enable --now bc250-registro
+[Unit]
+Description=BC-250 registro de uso (temperatura, potencia, clocks) em CSV
+After=bc250-nucleos-boot.service bc250-smu-oc.service local-fs.target
+RequiresMountsFor=/home
+
+[Service]
+ExecStart=/usr/local/lib/bc250-registro/bc250-registro.py /home/SEU_USUARIO/Desktop/bc250-registro SEU_USUARIO 60
+Nice=10
+Restart=on-failure
+RestartSec=30
+
+[Install]
+WantedBy=multi-user.target
