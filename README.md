@@ -2,7 +2,7 @@
 
 Scripts para ligar os núcleos de CPU que vêm **ocultos de fábrica** na AMD BC-250 (o "APU de PS5" das placas de mineração), **escolhendo quais**: liga só os núcleos bons e deixa parado o que tem defeito. Fica permanente, sobrevive a atualização de kernel e convive com a correção ACPI de energia (P-states/C-states) do e-tho.
 
-Na placa em que foi feito: **12 → 14 threads** (núcleo 7 ligado, núcleo 3 com defeito parado), 3850 MHz de OC nos 7 núcleos, estável.
+Na placa em que foi feito: **12 → 14 threads** (núcleo 7 ligado, núcleo 3 com defeito parado), 3850 MHz de OC nos 7 núcleos, estável, e **+17,4% no Cinebench R23 multi core** (5456 → 6406 pts, [detalhes](#benchmark-cinebench-r23-6--7-núcleos)).
 
 > ⚠ **Risco por sua conta.** Mexe na SMU (o microcontrolador de energia do chip) e na tabela de CPUs do boot. Um núcleo oculto pode estar oculto **porque tem defeito**: ligar um núcleo ruim pode travar a placa ou corromper dados. Teste cada núcleo antes de deixar permanente. Desligar e ligar a placa (boot frio) sempre volta ao padrão de fábrica.
 
@@ -17,6 +17,7 @@ Na placa em que foi feito: **12 → 14 threads** (núcleo 7 ligado, núcleo 3 co
 - [Sistemas suportados](#sistemas-suportados)
 - [Replicar em outra placa](#replicar-em-outra-placa)
 - [Onde foi testado](#onde-foi-testado)
+- [Benchmark: Cinebench R23](#benchmark-cinebench-r23-6--7-núcleos)
 - [Overclock, modo Gaming e correção ACPI: até onde foi testado](#overclock-modo-gaming-e-correção-acpi-até-onde-foi-testado)
 - [Desfazer](#desfazer)
 - [Estrutura da pasta](#estrutura-da-pasta)
@@ -211,6 +212,22 @@ Resultado no CachyOS:
 | Repouso | PPT ~31,7 W, Tctl ~40 °C |
 
 **Fedora/Nobara:** o script `bc250-nucleos.sh` recebeu em 2026-10-05 as mesmas correções do Arch (lista em [docs/fedora-nobara.md](docs/fedora-nobara.md#correções-de-2026-10-05-vindas-da-versão-arch-ainda-não-testadas-no-fedora)). A sintaxe e a MADT gerada foram conferidas (idêntica à que roda na placa), mas **essa versão ainda não foi rodada num Fedora**.
+
+## Benchmark: Cinebench R23 (6 × 7 núcleos)
+
+Mesma placa e mesmo boot de sistema, só mudando o núcleo 7 (serviço desligado com `/etc/bc250-nucleos.desligado` + reboot para o teste de 6 núcleos). Nos dois: OC 3850 MHz / scale −31, correção ACPI ativa, `scx_lavd` em modo Gaming, CachyOS, Cinebench R23.200 pelo Wine 11.19.
+
+| | 6 núcleos / 12 threads (fábrica) | 7 núcleos / 14 threads | Diferença |
+|---|---|---|---|
+| **CPU (Multi Core)** | 5456 pts | **6406 pts** | **+950 pts (+17,4%)** |
+| CPU (Single Core) | 286 pts | 284 pts | igual (margem de erro) |
+| MP Ratio | 19,09× | 22,55× | |
+
+O ganho multi core acompanha o núcleo a mais (7/6 = +16,7%); o single core não muda, porque cada núcleo continua no mesmo clock.
+
+| 6 núcleos (12 threads) | 7 núcleos (14 threads) |
+|---|---|
+| ![Cinebench R23 com 6 núcleos: 5456 pts](docs/img/cinebench-r23-6-nucleos.png) | ![Cinebench R23 com 7 núcleos: 6406 pts](docs/img/cinebench-r23-7-nucleos.png) |
 
 ## Overclock, modo Gaming e correção ACPI: até onde foi testado
 
