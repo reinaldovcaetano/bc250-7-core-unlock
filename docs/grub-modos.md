@@ -289,6 +289,22 @@ Elas vão junto nas **duas** entradas BC-250 (6 e 7 núcleos), só se a BIOS for
 | `instalar` | Rodado na placa: entradas, cpio, serviço, hook e menu do GRUB conferidos no disco |
 | Proteção contra loop (6 cenários: destrave normal, travamento com padrão 6 e 7, travamento antes do serviço, reset quente na entrada errada) | Simulada com comandos falsos; todos caíram em 6 núcleos |
 | `confere_madt.py` | Testado contra a tabela da BIOS (recusa) e contra as geradas (aceita) |
-| **Boot real em 6 e 7 núcleos pelo GRUB** | **Ainda não feito**. Ver [Primeiro teste](#primeiro-teste-passo-a-passo) |
+| Boot real em **"6 nucleos (normal)"** | **OK.** 12 threads, máscara `0x77`, tabela de CPUs e as 3 SSDT carregadas pelo initrd (`Table Upgrade: override [APIC…]`, `[SSDT… AMD CPU]`, `install STUBS` e `PSTATES`), `acpi-cpufreq` ativo |
+| Boot real em **"7 nucleos (destrave)"** (com OC 3850 / −30) | **OK.** Um único reset quente (cerca de 18 s), subiu com **14 threads** (APIC 0–5 e 8–15, máscara `0xFF`), o núcleo 3 com defeito continuou fora, e o boot ficou **confirmado** após 5 min. O padrão do GRUB continuou em 6 núcleos |
+| Estresse em 7 núcleos com OC | `stress-ng --cpu 14 --verify` por **9 min 41 s**: **14/14 passed, 0 failed**, sem nenhum erro de hardware (MCE) no kernel |
+| Boot real em "7 nucleos sem OC (seguranca)" | Ainda não testado (é só a opção de emergência) |
+| Travamento real em 7 núcleos (a volta sozinha para 6) | Não aconteceu, então só foi testado por simulação |
 
-A parte que mexe no hardware (SMU, reset quente, tabela de CPUs pelo initrd) é a mesma do `bc250-nucleos.sh`, validada no CachyOS com 14 threads e OC de 3850 MHz.
+### Medidas do estresse (Nobara, 7 núcleos, OC 3850 MHz / scale −30)
+
+| | Medido |
+|---|---|
+| Clock com carga | **3822–3842 MHz em todos os 14 threads** durante o teste inteiro |
+| Temperatura (Tctl) | estável em **~80 °C**, pico de **82,2 °C** (limite do OC: 90 °C) |
+| Potência (PPT) | 60–69 W |
+| Repouso logo após o boot | Tctl ~45 °C, PPT ~34 W; com o `schedutil`, os núcleos descem para 800–1700 MHz |
+| Escalonador | O padrão do kernel (EEVDF), **sem** `scx_lavd`. Diferente do CachyOS, nenhum núcleo ficou preso em ~1700 MHz com carga, então o modo Gaming não fez falta |
+
+> **Temperatura:** foi cerca de **12 °C acima** do que se mediu no CachyOS (~68 °C) com potência parecida (as diferenças: scale −30 contra −31, ambiente e ventilação do dia). Ainda há margem até os 90 °C, mas vale ficar de olho no cooler e no fluxo de ar, principalmente no calor e com jogo pesado.
+
+A parte que mexe no hardware (SMU, reset quente, tabela de CPUs pelo initrd) é a mesma do `bc250-nucleos.sh`, validada antes no CachyOS com 14 threads e OC de 3850 MHz.

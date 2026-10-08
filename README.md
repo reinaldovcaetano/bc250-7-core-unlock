@@ -318,6 +318,8 @@ Na placa original, o boot com 7 núcleos travou depois de o serviço da etapa 5 
 - **À prova de atualização:** as entradas são recriadas a cada kernel novo; a correção ACPI não carrega em dobro se o Control Center instalar a dele.
 - **`verificar-placa.sh`:** confere a placa e o boot só lendo, sem mudar nada.
 
+**Testado na placa (Nobara, 2026-10-08):** os boots reais em "6 nucleos" e "7 nucleos (destrave)" funcionaram pelo GRUB. Em 7 núcleos com OC 3850 MHz / −30, o `stress-ng --cpu 14 --verify` rodou 9 min 41 s e deu **14/14 passed, 0 failed**, com os 14 threads em ~3840 MHz o tempo todo e Tctl em ~80 °C. Os números completos estão em [docs/grub-modos.md](docs/grub-modos.md#onde-foi-testado).
+
 Detalhes: [docs/grub-modos.md](docs/grub-modos.md).
 
 ## Desfazer
