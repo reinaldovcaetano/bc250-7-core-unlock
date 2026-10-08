@@ -19,6 +19,7 @@ Na placa em que foi feito: **12 → 14 threads** (núcleo 7 ligado, núcleo 3 co
 - [Onde foi testado](#onde-foi-testado)
 - [Benchmark: Cinebench R23](#benchmark-cinebench-r23-6--7-núcleos)
 - [Overclock, modo Gaming e correção ACPI: até onde foi testado](#overclock-modo-gaming-e-correção-acpi-até-onde-foi-testado)
+- [Novidades: escolha pelo menu do GRUB](#novidades-escolha-pelo-menu-do-grub-2026-10-08)
 - [Desfazer](#desfazer)
 - [Estrutura da pasta](#estrutura-da-pasta)
 - [Créditos](#créditos)
@@ -169,6 +170,23 @@ sudo ./bc250-nucleos.sh
 ```
 Menu em etapas, que só andam em ordem: **1** diagnóstico (descobre a máscara e os núcleos ocultos, instala dependências) → **2** desliga o OC → **3** testa cada núcleo oculto sozinho, um por boot, com estresse (`stress-ng --verify`) → **4** resultado → **5** instala só os bons → **6** religa o OC. Detalhes: [docs/fedora-nobara.md](docs/fedora-nobara.md).
 
+### Fedora / Nobara: escolher pelo menu do GRUB (recomendado depois dos testes)
+Em vez de destravar sozinho em todo boot (etapa 5), o `bc250-grub.sh` põe a escolha **no menu do GRUB**, que passa a ficar visível:
+
+```
+BC-250: 6 nucleos (normal)              <- padrão, nunca destrava
+BC-250: 7 nucleos (destrave)
+BC-250: 7 nucleos sem OC (seguranca)
+Nobara Linux (...)                      <- entrada original, intocada
+```
+
+Se um boot de 7 núcleos travar, o próximo cai **sozinho** em 6 núcleos, sem loop. Antes de destravar, ele também confere se a tabela de CPUs carregou, se o Secure Boot está desligado e se a BIOS é a mesma.
+```
+sudo ./verificar-placa.sh          # opcional, só lê
+sudo ./bc250-grub.sh instalar
+```
+Guia completo, com passo a passo, proteções e como voltar: [docs/grub-modos.md](docs/grub-modos.md).
+
 ### Arch / CachyOS (Limine)
 O script do Arch não tem a fila de testes. Descubra os núcleos bons testando **um de cada vez**:
 ```
@@ -289,11 +307,24 @@ Carregamento conferido no `dmesg`: `Table Upgrade: override [SSDT- AMD- AMD CPU]
 ### Registro de uso
 `registro/bc250-registro.py` grava a cada minuto, num CSV por dia: temperatura da CPU e da GPU, potência, tensão, clock de cada núcleo físico (pela SMU; o núcleo com defeito aparece sempre baixo), threads online, carga, modo do escalonador e erros de hardware (MCE). Instalação no comentário do `registro/bc250-registro.service`. Serve para conferir o OC no uso real (picos de temperatura, quedas de clock, núcleo extra que não subiu).
 
+## Novidades: escolha pelo menu do GRUB (2026-10-08)
+
+Na placa original, o boot com 7 núcleos travou depois de o serviço da etapa 5 já ter confirmado. Daí em diante, todo boot destravava e travava de novo. Com o menu do GRUB escondido (padrão do Nobara), não houve como sair: foi preciso **formatar**. O `bc250-grub.sh` resolve isso:
+
+- **Você escolhe no GRUB:** "6 núcleos", "7 núcleos" ou "7 núcleos sem OC". O menu fica visível por 5 s.
+- **Sem loop:** o padrão gravado do GRUB é sempre 6 núcleos. O "padrão 7" é um one-shot que o GRUB apaga ao usar e que só é renovado depois de 5 min de pé ou de um desligamento normal. Um boot de 7 núcleos que trava faz o próximo cair em 6, e a falha fica registrada.
+- **Modo de 6 núcleos de verdade:** a entrada tem uma tabela de CPUs que não deixa o núcleo extra subir, e já leva a correção ACPI de energia.
+- **Travas novas antes de gravar a máscara:** a tabela de CPUs nova tem de estar em uso (sem ela o kernel acordaria o núcleo com defeito); Secure Boot desligado; mesma BIOS da instalação.
+- **À prova de atualização:** as entradas são recriadas a cada kernel novo; a correção ACPI não carrega em dobro se o Control Center instalar a dele.
+- **`verificar-placa.sh`:** confere a placa e o boot só lendo, sem mudar nada.
+
+Detalhes: [docs/grub-modos.md](docs/grub-modos.md).
+
 ## Desfazer
 
 | Sistema | Comando |
 |---|---|
-| Fedora / Nobara | `sudo ./bc250-nucleos.sh` → opção 9 |
+| Fedora / Nobara | `sudo ./bc250-nucleos.sh` → opção 9; `sudo ./bc250-grub.sh desfazer` (entradas do GRUB) |
 | Arch / CachyOS | `sudo ./bc250-nucleos-arch.sh desfazer` (núcleos) e `sudo ./bc250-nucleos-arch.sh acpi-desfazer` (correção ACPI) |
 
 Depois, reinicie **desligando a placa** (boot frio): volta tudo ao padrão de fábrica.
@@ -305,11 +336,14 @@ bc250-nucleos/
 ├── README.md                  este arquivo
 ├── bc250-nucleos.sh           Fedora/Nobara (GRUB+BLS): diagnóstico, fila de testes, instalação
 ├── bc250-nucleos-arch.sh      Arch/CachyOS (Limine): testar, instalar, status, desfazer, acpi
+├── bc250-grub.sh              Fedora/Nobara: 6 ou 7 núcleos escolhidos no menu do GRUB, à prova de loop
+├── verificar-placa.sh         confere placa, MADT, SSDT e GRUB só lendo (não muda nada)
 │                              (extrai o smu.py e o madt.py do bc250-nucleos.sh: mantenha os dois juntos)
 ├── acpi/                      SSDT do e-tho v1.1.0 (MIT) + LEIA-ME com sha256
 ├── registro/                  registro de uso em CSV (script + modelo de serviço)
 └── docs/
     ├── fedora-nobara.md       manual do script Fedora
+    ├── grub-modos.md          manual do bc250-grub.sh (entradas do GRUB e proteção contra loop)
     └── arch-cachyos.md        manual do script Arch, auditoria e registro dos testes na placa
 ```
 
