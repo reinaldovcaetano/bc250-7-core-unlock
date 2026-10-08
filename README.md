@@ -1,5 +1,7 @@
 # bc250-7-core-unlock: liberar só os núcleos bons ocultos da AMD BC-250
 
+**Idiomas:** **Português** · [English](README.en.md) · [Русский](README.ru.md)
+
 Scripts para ligar os núcleos de CPU que vêm **ocultos de fábrica** na AMD BC-250 (o "APU de PS5" das placas de mineração), **escolhendo quais**: liga só os núcleos bons e deixa parado o que tem defeito. Fica permanente, sobrevive a atualização de kernel e convive com a correção ACPI de energia (P-states/C-states) do e-tho.
 
 Na placa em que foi feito: **12 → 14 threads** (núcleo 7 ligado, núcleo 3 com defeito parado), 3850 MHz de OC nos 7 núcleos, estável, e **+17,4% no Cinebench R23 multi core** (5456 → 6406 pts, [detalhes](#benchmark-cinebench-r23-6--7-núcleos)).
@@ -334,8 +336,10 @@ Depois, reinicie **desligando a placa** (boot frio): volta tudo ao padrão de f�
 ## Estrutura da pasta
 
 ```
-bc250-nucleos/
-├── README.md                  este arquivo
+bc250-7-core-unlock/
+├── README.md                  este arquivo (português)
+├── README.en.md               inglês
+├── README.ru.md               russo
 ├── bc250-nucleos.sh           Fedora/Nobara (GRUB+BLS): diagnóstico, fila de testes, instalação
 ├── bc250-nucleos-arch.sh      Arch/CachyOS (Limine): testar, instalar, status, desfazer, acpi
 ├── bc250-grub.sh              Fedora/Nobara: 6 ou 7 núcleos escolhidos no menu do GRUB, à prova de loop
