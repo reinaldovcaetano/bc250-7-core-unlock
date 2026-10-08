@@ -1,5 +1,7 @@
 # bc250-nucleos-arch: núcleo 7 da BC-250 no Arch / CachyOS (Limine)
 
+**Idiomas:** **Português** · [English](arch-cachyos.en.md) · [Русский](arch-cachyos.ru.md)
+
 Versão do `bc250-nucleos.sh` para **Arch/CachyOS com o bootloader Limine**. O script original só funciona em Fedora/Nobara (GRUB com BLS).
 
 Também instala a **correção ACPI do e-tho** (P-states/C-states, as mesmas tabelas da "correção ACPI" do BC250 Control Center) em todo boot, **com ou sem o núcleo extra**, sem trocar o Limine por GRUB/systemd-boot.
@@ -31,7 +33,7 @@ Também instala a **correção ACPI do e-tho** (P-states/C-states, as mesmas tab
 ## Uso
 
 ```
-cd ~/Downloads/bc250-nucleos
+cd ~/Downloads/bc250-7-core-unlock
 sudo ./bc250-nucleos-arch.sh testar     # liga o núcleo 7 em UM boot só
 sudo ./bc250-nucleos-arch.sh status     # resultado; nproc deve dar 14
 sudo ./bc250-nucleos-arch.sh instalar   # deixa ligado como padrão (todo boot frio vira 2 boots)

@@ -347,7 +347,7 @@ bc250-7-core-unlock/
 │                              (extrai o smu.py e o madt.py do bc250-nucleos.sh: mantenha os dois juntos)
 ├── acpi/                      SSDT do e-tho v1.1.0 (MIT) + LEIA-ME com sha256
 ├── registro/                  registro de uso em CSV (script + modelo de serviço)
-└── docs/
+└── docs/                      manuais: <nome>.md (português), <nome>.en.md (inglês), <nome>.ru.md (russo)
     ├── fedora-nobara.md       manual do script Fedora
     ├── grub-modos.md          manual do bc250-grub.sh (entradas do GRUB e proteção contra loop)
     └── arch-cachyos.md        manual do script Arch, auditoria e registro dos testes na placa

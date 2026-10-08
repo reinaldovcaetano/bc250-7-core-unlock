@@ -1,5 +1,7 @@
 # bc250-grub.sh: escolher 6 ou 7 núcleos no menu do GRUB (Fedora / Nobara)
 
+**Idiomas:** **Português** · [English](grub-modos.en.md) · [Русский](grub-modos.ru.md)
+
 > **Em uma frase:** em vez de a placa destravar o núcleo extra sozinha em todo boot, agora **você escolhe no menu do GRUB** se quer 6 ou 7 núcleos, e se algo travar ela **volta sozinha para 6 núcleos**. Não tem mais loop.
 
 ## Sumário

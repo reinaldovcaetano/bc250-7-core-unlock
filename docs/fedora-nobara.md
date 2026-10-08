@@ -1,5 +1,7 @@
 # bc250-nucleos: libera e testa os núcleos ocultos da AMD BC-250
 
+**Idiomas:** **Português** · [English](fedora-nobara.en.md) · [Русский](fedora-nobara.ru.md)
+
 > ## ⚠ Só funciona em **Fedora** e **Nobara**
 > O script precisa do GRUB com BLS (`/boot/loader/entries` + `grub2-reboot`), boot EFI e um sistema **não** imutável.
 > **Não funciona** em Ubuntu, Debian, Mint, Arch com GRUB, Pop!_OS (systemd-boot), Bazzite, Silverblue ou SteamOS. Para Arch/CachyOS com Limine use o `bc250-nucleos-arch.sh` ([arch-cachyos.md](arch-cachyos.md)).
@@ -35,6 +37,8 @@ Ele abre um menu com as etapas numeradas. As etapas **só andam na ordem**: as q
 - Para ligar só os bons, o boot carrega uma tabela de CPUs (MADT) pelo initrd que lista só os núcleos desejados. Os outros ficam parados. O kernel precisa ter `CONFIG_ACPI_TABLE_UPGRADE=y`.
 - Na BIOS P3.00 vão juntas as tabelas de P-states e C-states do e-tho/bc250-acpi-fix (pasta `acpi/`). Com elas, o Linux controla o clock da CPU.
 - Depois da etapa 5, todo boot frio vira **dois boots**: o primeiro grava `0xFF` e reinicia a quente sozinho; o segundo já sobe com os núcleos bons.
+
+> Para escolher 6 ou 7 núcleos no menu do GRUB em vez de destravar em todo boot (recomendado depois dos testes), veja [grub-modos.md](grub-modos.md).
 
 ## Arquivos na placa
 - Estado: `/var/lib/bc250-nucleos/`, com `estado.env`, `historico.log`, `teste-<núcleo>.log`, `relatorio.txt` e `boot.log`.

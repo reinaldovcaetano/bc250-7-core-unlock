@@ -8,7 +8,7 @@ On the board it was made on: **12 → 14 threads** (core 7 enabled, defective co
 
 > ⚠ **Use at your own risk.** This touches the SMU (the chip's power-management microcontroller) and the boot CPU table. A hidden core may be hidden **because it is defective**: enabling a bad core can freeze the board or corrupt data. Test each core before making it permanent. Powering the board off and on (cold boot) always returns to the factory state.
 
-> **Note:** the scripts, their messages, the GRUB menu entries and the detailed manuals in `docs/` are in **Portuguese**. Commands and entry names below are shown exactly as they appear on screen.
+> **Note:** the scripts, their messages and the GRUB menu entries are in **Portuguese**. Commands and entry names below are shown exactly as they appear on screen. The detailed manuals in `docs/` are available in English.
 
 ---
 
@@ -172,7 +172,7 @@ The same core can be good on one board and bad on another: **test each hidden co
 cd bc250-7-core-unlock
 sudo ./bc250-nucleos.sh
 ```
-A step-by-step menu that only advances in order: **1** diagnostics (finds the mask and hidden cores, installs dependencies) → **2** turns OC off → **3** tests each hidden core on its own, one per boot, with stress (`stress-ng --verify`) → **4** result → **5** installs only the good ones → **6** turns OC back on. Details (Portuguese): [docs/fedora-nobara.md](docs/fedora-nobara.md).
+A step-by-step menu that only advances in order: **1** diagnostics (finds the mask and hidden cores, installs dependencies) → **2** turns OC off → **3** tests each hidden core on its own, one per boot, with stress (`stress-ng --verify`) → **4** result → **5** installs only the good ones → **6** turns OC back on. Details: [docs/fedora-nobara.en.md](docs/fedora-nobara.en.md).
 
 ### Fedora / Nobara: choosing from the GRUB menu (recommended after testing)
 Instead of unlocking automatically on every boot (step 5), `bc250-grub.sh` puts the choice **in the GRUB menu**, which becomes visible:
@@ -189,7 +189,7 @@ If a 7-core boot freezes, the next one falls back to 6 cores **on its own**, wit
 sudo ./verificar-placa.sh          # optional, read-only
 sudo ./bc250-grub.sh instalar
 ```
-To make 7 cores the default: `sudo ./bc250-grub.sh padrao 7` (back to 6: `padrao 6`). Full guide with steps, protections and how to go back (Portuguese): [docs/grub-modos.md](docs/grub-modos.md).
+To make 7 cores the default: `sudo ./bc250-grub.sh padrao 7` (back to 6: `padrao 6`). Full guide with steps, protections and how to go back: [docs/grub-modos.en.md](docs/grub-modos.en.md).
 
 ### Arch / CachyOS (Limine)
 The Arch script has no test queue. Find the good cores by testing **one at a time**:
@@ -207,7 +207,7 @@ stress-ng --cpu $(nproc) --cpu-method all --verify -t 15m   # stress in the test
   sudo NUCLEOS="7" ./bc250-nucleos-arch.sh instalar
   ```
 
-Details, audit and the board's full log (Portuguese): [docs/arch-cachyos.md](docs/arch-cachyos.md).
+Details, audit and the board's full log: [docs/arch-cachyos.en.md](docs/arch-cachyos.en.md).
 
 ### After installing
 1. Reboot normally: the board restarts by itself once and comes back with more threads (`nproc`).
@@ -234,7 +234,7 @@ Results on CachyOS:
 | OC 3850 MHz / scale −31 (7 cores) | All 7 cores at 3850 MHz, 1175–1181 mV, Tctl ~68 °C, PPT ~62–66 W; `stress-ng --verify` 14/14 passed, 0 failed |
 | Idle | PPT ~31.7 W, Tctl ~40 °C |
 
-**Fedora/Nobara:** on 2026-10-05 the `bc250-nucleos.sh` script received the same fixes as the Arch version (list in [docs/fedora-nobara.md](docs/fedora-nobara.md#correções-de-2026-10-05-vindas-da-versão-arch-ainda-não-testadas-no-fedora)). Syntax and the generated MADT were checked (identical to the one running on the board), but **that version of the script has not been run on Fedora yet**. The newer `bc250-grub.sh` was tested on Nobara (see [What's new](#whats-new-choosing-from-the-grub-menu-2026-10-08)).
+**Fedora/Nobara:** on 2026-10-05 the `bc250-nucleos.sh` script received the same fixes as the Arch version (list in [docs/fedora-nobara.en.md](docs/fedora-nobara.en.md#fixes-from-2026-10-05-from-the-arch-version-not-yet-tested-on-fedora)). Syntax and the generated MADT were checked (identical to the one running on the board), but **that version of the script has not been run on Fedora yet**. The newer `bc250-grub.sh` was tested on Nobara (see [What's new](#whats-new-choosing-from-the-grub-menu-2026-10-08)).
 
 ## Benchmark: Cinebench R23 (6 vs 7 cores)
 
@@ -325,7 +325,7 @@ On the original board, a 7-core boot froze after the step 5 service had already 
 - **Update-proof:** entries are recreated for every new kernel; the ACPI fix is not loaded twice if the Control Center installs its own.
 - **`verificar-placa.sh`:** checks the board and the boot read-only, without changing anything.
 
-**Tested on the board (Nobara, 2026-10-08):** real boots of "6 nucleos" and "7 nucleos (destrave)" worked through GRUB. On 7 cores with OC 3850 MHz / −30, `stress-ng --cpu 14 --verify` ran 9 min 41 s with **14/14 passed, 0 failed**, all 14 threads at ~3840 MHz the whole time and Tctl around 80 °C. Full numbers (Portuguese): [docs/grub-modos.md](docs/grub-modos.md#onde-foi-testado).
+**Tested on the board (Nobara, 2026-10-08):** real boots of "6 nucleos" and "7 nucleos (destrave)" worked through GRUB. On 7 cores with OC 3850 MHz / −30, `stress-ng --cpu 14 --verify` ran 9 min 41 s with **14/14 passed, 0 failed**, all 14 threads at ~3840 MHz the whole time and Tctl around 80 °C. Full numbers: [docs/grub-modos.en.md](docs/grub-modos.en.md#where-it-was-tested).
 
 ## Undo
 
@@ -350,10 +350,10 @@ bc250-7-core-unlock/
 │                              (extracts smu.py and madt.py from bc250-nucleos.sh: keep both together)
 ├── acpi/                      e-tho SSDTs v1.1.0 (MIT) + LEIA-ME with sha256
 ├── registro/                  CSV usage log (script + service template)
-└── docs/                      (Portuguese)
-    ├── fedora-nobara.md       Fedora script manual
-    ├── grub-modos.md          bc250-grub.sh manual (GRUB entries and loop protection)
-    └── arch-cachyos.md        Arch script manual, audit and board test log
+└── docs/                      manuals: <name>.md (Portuguese), <name>.en.md (English), <name>.ru.md (Russian)
+    ├── fedora-nobara.*.md     Fedora script manual
+    ├── grub-modos.*.md        bc250-grub.sh manual (GRUB entries and loop protection)
+    └── arch-cachyos.*.md      Arch script manual, audit and board test log
 ```
 
 On the board, after installing: program in `/usr/local/lib/bc250-nucleos/`, state and logs in `/var/lib/bc250-nucleos/` (`boot.log` capped at the 500 most recent lines), configuration in `/etc/bc250-nucleos.conf`.
