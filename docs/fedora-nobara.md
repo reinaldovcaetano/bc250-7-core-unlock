@@ -8,7 +8,7 @@
 ## Como usar
 Copie a pasta inteira, com o `acpi/` junto, para a outra placa e rode:
 ```
-cd bc250-nucleos
+cd bc250-7-core-unlock
 sudo ./bc250-nucleos.sh
 ```
 Ele abre um menu com as etapas numeradas. As etapas **só andam na ordem**: as que ainda não podem ser feitas aparecem como `[travada]`.

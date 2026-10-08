@@ -75,8 +75,8 @@ Pré-requisitos: Fedora ou Nobara, GRUB com BLS (o padrão desses sistemas), boo
 
 1. Baixe a pasta inteira. O script usa os arquivos `bc250-nucleos.sh` e `acpi/` que estão junto:
    ```
-   git clone https://github.com/reinaldovcaetano/bc250-nucleos
-   cd bc250-nucleos
+   git clone https://github.com/reinaldovcaetano/bc250-7-core-unlock
+   cd bc250-7-core-unlock
    ```
 2. (Opcional) Confira a placa. Só lê, não muda nada:
    ```

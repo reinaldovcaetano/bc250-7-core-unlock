@@ -1,4 +1,4 @@
-# bc250-nucleos: liberar só os núcleos bons ocultos da AMD BC-250
+# bc250-7-core-unlock: liberar só os núcleos bons ocultos da AMD BC-250
 
 Scripts para ligar os núcleos de CPU que vêm **ocultos de fábrica** na AMD BC-250 (o "APU de PS5" das placas de mineração), **escolhendo quais**: liga só os núcleos bons e deixa parado o que tem defeito. Fica permanente, sobrevive a atualização de kernel e convive com a correção ACPI de energia (P-states/C-states) do e-tho.
 
@@ -165,7 +165,7 @@ O mesmo núcleo pode ser bom numa placa e ruim noutra: **teste cada núcleo ocul
 
 ### Fedora / Nobara
 ```
-cd bc250-nucleos
+cd bc250-7-core-unlock
 sudo ./bc250-nucleos.sh
 ```
 Menu em etapas, que só andam em ordem: **1** diagnóstico (descobre a máscara e os núcleos ocultos, instala dependências) → **2** desliga o OC → **3** testa cada núcleo oculto sozinho, um por boot, com estresse (`stress-ng --verify`) → **4** resultado → **5** instala só os bons → **6** religa o OC. Detalhes: [docs/fedora-nobara.md](docs/fedora-nobara.md).
@@ -190,7 +190,7 @@ Guia completo, com passo a passo, proteções e como voltar: [docs/grub-modos.md
 ### Arch / CachyOS (Limine)
 O script do Arch não tem a fila de testes. Descubra os núcleos bons testando **um de cada vez**:
 ```
-cd bc250-nucleos
+cd bc250-7-core-unlock
 sudo ./bc250-nucleos-arch.sh acpi                 # opcional: correção ACPI em todo boot (reinicie depois)
 sudo NUCLEOS="7" ./bc250-nucleos-arch.sh testar   # liga só o núcleo 7 por UM boot (reinicia a quente sozinho)
 sudo ./bc250-nucleos-arch.sh status               # depois do boot: "OK: subiu com N threads"
